@@ -13,6 +13,7 @@ const FlankState := preload("res://scripts/enemy/states/flank.gd")
 const SurrenderState := preload("res://scripts/enemy/states/surrender.gd")
 const FleeState := preload("res://scripts/enemy/states/flee.gd")
 const LastStandState := preload("res://scripts/enemy/states/last_stand.gd")
+const SearchState := preload("res://scripts/enemy/states/search.gd")
 
 @export_group("Movement")
 @export var walk_speed: float = 1.8
@@ -97,13 +98,11 @@ func _ready() -> void:
 	GameEvents.shot_fired.connect(_on_shot_fired)
 	call_deferred("start")
 
-
 func start() -> void:
 	if _started:
 		return
 	_started = true
 	_build_hsm()
-
 
 func _build_hsm() -> void:
 	var idle: LimboState = IdleState.new()
@@ -115,6 +114,7 @@ func _build_hsm() -> void:
 	var surrender: LimboState = SurrenderState.new()
 	var flee: LimboState = FleeState.new()
 	var last_stand: LimboState = LastStandState.new()
+	var search: LimboState = SearchState.new()
 	idle.name = &"Idle"
 	patrol.name = &"Patrol"
 	take_cover.name = &"TakeCover"
@@ -124,7 +124,8 @@ func _build_hsm() -> void:
 	surrender.name = &"Surrender"
 	flee.name = &"Flee"
 	last_stand.name = &"LastStand"
-	for s: LimboState in [idle, patrol, take_cover, confirm, suppress, flank, surrender, flee, last_stand]:
+	search.name = &"Search"
+	for s: LimboState in [idle, patrol, take_cover, confirm, suppress, flank, surrender, flee, last_stand, search]:
 		hsm.add_child(s)
 
 	hsm.initial_state = idle
@@ -137,6 +138,8 @@ func _build_hsm() -> void:
 	hsm.add_transition(hsm.ANYSTATE, suppress, &"confirmed")
 	hsm.add_transition(hsm.ANYSTATE, flank, &"flank")
 	hsm.add_transition(hsm.ANYSTATE, patrol, &"target_lost")
+	hsm.add_transition(hsm.ANYSTATE, search, &"unconfirmed")
+	hsm.add_transition(search, take_cover, &"contact")
 	hsm.add_transition(hsm.ANYSTATE, surrender, &"morale_break_surrender")
 	hsm.add_transition(hsm.ANYSTATE, flee, &"morale_break_flee")
 	hsm.add_transition(hsm.ANYSTATE, last_stand, &"morale_break_last_stand")
@@ -171,6 +174,43 @@ func current_state_name() -> StringName:
 func is_combatant() -> bool:
 	return alive and not surrendered and not routed
 
+var _pause_cover: Node3D = null
+
+
+func alert_paused() -> bool:
+	if coordinator == null:
+		return false
+	var lvl: Variant = coordinator.get(&"alert_level")
+	if lvl == null:
+		return false
+	var limit: Variant = coordinator.get(&"patrol_pause_alert")
+	return int(lvl) >= (int(limit) if limit != null else 2)
+
+
+func hold_in_cover(delta: float) -> void:
+	if coordinator == null:
+		stop(delta)
+		return
+	if _pause_cover == null:
+		if coordinator.has_method(&"reserve_cover_near"):
+			_pause_cover = coordinator.reserve_cover_near(self)
+		else:
+			_pause_cover = coordinator.reserve_cover(self, global_position)
+	if _pause_cover != null and not is_at(_pause_cover.global_position, 1.0):
+		in_cover = false
+		move_to(_pause_cover.global_position, run_speed, delta)
+		return
+	in_cover = true
+	var low := _pause_cover == null or str(_pause_cover.get_meta("height", "low")) == "low"
+	set_crouched(low)
+	stop(delta)
+
+
+func release_pause_cover() -> void:
+	if _pause_cover != null:
+		if coordinator:
+			coordinator.release_cover(self)
+		_pause_cover = null
 
 func get_player() -> Node3D:
 	if _player == null:
