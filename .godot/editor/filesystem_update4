@@ -1,0 +1,8 @@
+res://scripts/enemy/enemy.gd
+res://scripts/enemy/states/idle.gd
+res://scripts/enemy/states/patrol.gd
+res://scripts/player/bullet.gd
+res://scripts/enemy/hitbox.gd
+res://scenes/Bullet.tscn
+res://scripts/player/player.gd
+res://scenes/Player.tscn
