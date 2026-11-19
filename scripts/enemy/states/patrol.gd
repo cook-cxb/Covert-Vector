@@ -13,6 +13,10 @@ func enter(_data: Dictionary = {}) -> void:
 
 
 func physics_update(delta: float) -> void:
+	if enemy.alert_paused():
+		enemy.hold_in_cover(delta)
+		return
+	enemy.release_pause_cover()
 	if enemy.patrol_points.is_empty():
 		dispatch(&"finished")
 		return
