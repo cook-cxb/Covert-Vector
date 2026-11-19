@@ -1,0 +1,90 @@
+[gd_scene format=3 uid="uid://pb7frcqboxk4"]
+
+[ext_resource type="Script" uid="uid://ctq2ybmddjv6b" path="res://scripts/enemy/enemy.gd" id="1_s6wwv"]
+[ext_resource type="Script" uid="uid://bvojcdtkrp8ce" path="res://scripts/enemy/hitbox.gd" id="2_44ybf"]
+[ext_resource type="PackedScene" uid="uid://cg080ly2mgyl1" path="res://scenes/Bullet.tscn" id="2_img3j"]
+[ext_resource type="Script" uid="uid://bxelcj1xacsw6" path="res://scripts/enemy/health_component.gd" id="3_img3j"]
+[ext_resource type="Script" uid="uid://terckxo6bpjc" path="res://scripts/enemy/morale_component.gd" id="4_k74vj"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_i722t"]
+radius = 0.35
+height = 1.8
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_owc8s"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_5muo4"]
+radius = 0.18
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_x2key"]
+radius = 0.4
+
+[node name="Enemy" type="CharacterBody3D" unique_id=331551408]
+collision_layer = 4
+script = ExtResource("1_s6wwv")
+bullet_scene = ExtResource("2_img3j")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1864562813]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_i722t")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="." unique_id=381772507]
+
+[node name="Head" type="Node3D" parent="." unique_id=2032207826]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+
+[node name="RayCast3D" type="RayCast3D" parent="Head" unique_id=790696502]
+collision_mask = 19
+
+[node name="VisionCone" type="Area3D" parent="." unique_id=1410682125]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="VisionCone" unique_id=726680803]
+
+[node name="HearingArea" type="Area3D" parent="." unique_id=1718766819]
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HearingArea" unique_id=946867279]
+shape = SubResource("SphereShape3D_owc8s")
+
+[node name="HeadHitbox" type="Area3D" parent="." unique_id=1295776681]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("2_44ybf")
+damage_multiplier = 2.5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HeadHitbox" unique_id=1665615238]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.65, 0)
+shape = SubResource("SphereShape3D_5muo4")
+
+[node name="BodyHitbox" type="Area3D" parent="." unique_id=1462259554]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("2_44ybf")
+damage_multiplier = null
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BodyHitbox" unique_id=1511975469]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("SphereShape3D_x2key")
+
+[node name="HealthComponent" type="Node" parent="." unique_id=169485974]
+script = ExtResource("3_img3j")
+
+[node name="MoraleComponent" type="Node" parent="." unique_id=1100568379]
+script = ExtResource("4_k74vj")
+
+[node name="LimboHSM" type="LimboHSM" parent="." unique_id=2070920672]
+
+[node name="Muzzle" type="Marker3D" parent="." unique_id=910508426]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 1.4, -0.6)
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=47377623]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1926614200]
+
+[node name="Label3D" type="Label3D" parent="." unique_id=182996499]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 0)
+billboard = 1
+no_depth_test = true
