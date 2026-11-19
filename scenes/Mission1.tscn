@@ -1,0 +1,164 @@
+[gd_scene format=3 uid="uid://c1rvsrrsw0roe"]
+
+[ext_resource type="Script" uid="uid://dpy3x74e5b3u3" path="res://scripts/mission/mission1.gd" id="1_t47at"]
+[ext_resource type="Script" uid="uid://cp6btdoukuq83" path="res://scripts/mission/squad_coordinator.gd" id="2_q7de0"]
+[ext_resource type="PackedScene" uid="uid://pb7frcqboxk4" path="res://scenes/enemy/Enemy.tscn" id="3_l3lst"]
+[ext_resource type="PackedScene" uid="uid://bwcgu2aqhi5wv" path="res://scenes/Player.tscn" id="4_own4u"]
+
+[sub_resource type="Terrain3DMaterial" id="Terrain3DMaterial_8vlog"]
+_shader_parameters = {
+&"bias_distance": null,
+&"blend_sharpness": null,
+&"depth_blur": null,
+&"distant_normal_scale": null,
+&"flat_terrain_normals": null,
+&"general_uniforms": null,
+&"ground_level": null,
+&"mipmap_bias": null,
+&"mipmaps": null,
+&"private": null,
+&"region_blend": null
+}
+show_checkered = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0vplr"]
+transparency = 4
+cull_mode = 2
+vertex_color_use_as_albedo = true
+backlight_enabled = true
+backlight = Color(0.5, 0.5, 0.5, 1)
+distance_fade_mode = 1
+distance_fade_min_distance = 128.0
+distance_fade_max_distance = 96.0
+metadata/terrain3d_generated_material = true
+
+[sub_resource type="Terrain3DMeshAsset" id="Terrain3DMeshAsset_wfo2y"]
+generated_type = 1
+height_offset = 0.5
+density = 10.0
+material_override = SubResource("StandardMaterial3D_0vplr")
+last_lod = 0
+last_shadow_lod = 0
+lod0_range = 128.0
+
+[sub_resource type="Terrain3DAssets" id="Terrain3DAssets_28nuf"]
+mesh_list = Array[Terrain3DMeshAsset]([SubResource("Terrain3DMeshAsset_wfo2y")])
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_quu7w"]
+
+[sub_resource type="Sky" id="Sky_jpjyx"]
+sky_material = SubResource("ProceduralSkyMaterial_quu7w")
+
+[sub_resource type="Environment" id="Environment_1sn5a"]
+background_mode = 2
+sky = SubResource("Sky_jpjyx")
+ambient_light_source = 3
+fog_enabled = true
+fog_density = 0.003
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_glehp"]
+agent_height = 1.8
+
+[node name="Mission1" type="Node3D" unique_id=2086875673]
+script = ExtResource("1_t47at")
+
+[node name="Terrain3D" type="Terrain3D" parent="." unique_id=50490465]
+material = SubResource("Terrain3DMaterial_8vlog")
+assets = SubResource("Terrain3DAssets_28nuf")
+collision_mode = 3
+displacement_sharpness = 0.5
+show_checkered = true
+top_level = true
+metadata/_edit_lock_ = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=885523681]
+environment = SubResource("Environment_1sn5a")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=758993024]
+transform = Transform3D(0.8660254, -0.38302222, 0.32139382, 0, 0.64278764, 0.76604444, -0.5, -0.66341394, 0.5566704, 0, 0, 0)
+shadow_enabled = true
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=1136852097]
+navigation_mesh = SubResource("NavigationMesh_glehp")
+
+[node name="Outpost" type="Node3D" parent="." unique_id=1660462195]
+
+[node name="Patrol1" type="Marker3D" parent="Outpost" unique_id=1015833941]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.1, 0, 9.57)
+
+[node name="Patrol2" type="Marker3D" parent="Outpost" unique_id=915959017]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.57, 0, 23.1)
+
+[node name="Patrol3" type="Marker3D" parent="Outpost" unique_id=2010484525]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.57, 0, 23.1)
+
+[node name="Patrol4" type="Marker3D" parent="Outpost" unique_id=2064270469]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.1, 0, 9.57)
+
+[node name="Patrol5" type="Marker3D" parent="Outpost" unique_id=144238543]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.1, 0, -9.57)
+
+[node name="Patrol6" type="Marker3D" parent="Outpost" unique_id=998213485]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.57, 0, -23.1)
+
+[node name="Patrol7" type="Marker3D" parent="Outpost" unique_id=1306198417]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.57, 0, -23.1)
+
+[node name="Patrol8" type="Marker3D" parent="Outpost" unique_id=869053706]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.1, 0, -9.57)
+
+[node name="CoverPoints" type="Node3D" parent="." unique_id=1011380592]
+
+[node name="Cover1" type="Marker3D" parent="CoverPoints" unique_id=1715039502 groups=["cover"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -3)
+metadata/height = "low"
+
+[node name="Cover2" type="Marker3D" parent="CoverPoints" unique_id=969334152 groups=["cover"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 5)
+metadata/height = "high"
+
+[node name="Cover3" type="Marker3D" parent="CoverPoints" unique_id=138494256 groups=["cover"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 12)
+metadata/height = "low"
+
+[node name="SquadCoordinator" type="Node" parent="." unique_id=192370031]
+script = ExtResource("2_q7de0")
+
+[node name="EnemySquad" type="Node3D" parent="." unique_id=691831684]
+
+[node name="Enemy1" parent="EnemySquad" unique_id=331551408 instance=ExtResource("3_l3lst")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0.1, 0)
+log_transitions = true
+
+[node name="Enemy2" parent="EnemySquad" unique_id=2070153955 instance=ExtResource("3_l3lst")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.6, 0.1, 10.6)
+log_transitions = true
+
+[node name="Enemy3" parent="EnemySquad" unique_id=1109939195 instance=ExtResource("3_l3lst")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 15)
+log_transitions = true
+
+[node name="Enemy4" parent="EnemySquad" unique_id=1233292726 instance=ExtResource("3_l3lst")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.6, 0.1, 10.6)
+log_transitions = true
+
+[node name="Enemy5" parent="EnemySquad" unique_id=1518637237 instance=ExtResource("3_l3lst")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0.1, 0)
+log_transitions = true
+
+[node name="Enemy6" parent="EnemySquad" unique_id=1101751935 instance=ExtResource("3_l3lst")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.6, 0.1, -10.6)
+log_transitions = true
+
+[node name="Enemy7" parent="EnemySquad" unique_id=1978909160 instance=ExtResource("3_l3lst")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, -15)
+log_transitions = true
+
+[node name="Enemy8" parent="EnemySquad" unique_id=491351565 instance=ExtResource("3_l3lst")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.6, 0.1, -10.6)
+log_transitions = true
+
+[node name="HideSpawn" type="Marker3D" parent="." unique_id=1079270759]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 150)
+
+[node name="Player" parent="." unique_id=261964884 instance=ExtResource("4_own4u")]

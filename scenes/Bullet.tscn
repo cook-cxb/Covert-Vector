@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://cg080ly2mgyl1"]
+
+[ext_resource type="Script" uid="uid://co25a3m7phmlu" path="res://scripts/player/bullet.gd" id="1_hf8mt"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hf8mt"]
+shading_mode = 0
+albedo_color = Color(1, 0.75, 0.2, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_p1sfj"]
+size = Vector3(0.1, 0.1, 5)
+
+[node name="Bullet" type="Node3D" unique_id=1252541188]
+script = ExtResource("1_hf8mt")
+
+[node name="RayCast3D" type="RayCast3D" parent="." unique_id=1970655162]
+collision_mask = 9
+collide_with_areas = true
+
+[node name="Tracer" type="MeshInstance3D" parent="." unique_id=1498007504]
+material_override = SubResource("StandardMaterial3D_hf8mt")
+cast_shadow = 0
+mesh = SubResource("BoxMesh_p1sfj")
